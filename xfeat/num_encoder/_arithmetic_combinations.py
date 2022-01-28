@@ -84,6 +84,7 @@ class ArithmeticCombinations(TransformerMixin):
         """
         new_df = input_df.copy()
         generated_cols = []
+        additional_cols = {}
 
         n_fixed_cols = len(self._include_cols)
 
@@ -118,7 +119,11 @@ class ArithmeticCombinations(TransformerMixin):
                     else:
                         raise RuntimeError("Unknown operator is used.")
 
-            new_df[new_col] = new_ser
+            # new_df[new_col] = new_ser
+            additional_cols[new_col] = new_ser
+
+        additional_df = pd.DataFrame(additional_cols)
+        new_df = pd.concat([new_df, additional_df], axis=1)
 
         if self._drop_origin:
             return new_df[generated_cols]
